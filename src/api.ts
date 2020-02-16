@@ -1,6 +1,11 @@
 import ky from 'ky';
 import { Difficulty } from './components/GameMenu';
 
+const prefixUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://hearthstone-card-memory-game.herokuapp.com'
+    : 'http://localhost:3001';
+
 export type CardInfo = {
   id: number;
   slug: string;
@@ -14,7 +19,8 @@ export type Cards = {
 
 function getCards(difficulty: Difficulty) {
   return ky
-    .get('http://localhost:3001/cards', {
+    .get('cards', {
+      prefixUrl,
       searchParams: {
         difficulty
       }
@@ -27,7 +33,7 @@ export type Cardback = {
 };
 
 function getCardback() {
-  return ky.get('http://localhost:3001/cardback').json<{ image: string }>();
+  return ky.get('cardback', { prefixUrl }).json<{ image: string }>();
 }
 const api = {
   getCards,
